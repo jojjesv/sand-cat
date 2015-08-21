@@ -27,7 +27,6 @@ public class SandCatGame extends Game {
 
 	public static boolean isMobile() {
 		final ApplicationType type = Gdx.app.getType();
-		// ra
 		return type.equals(ApplicationType.Android) || type.equals(ApplicationType.iOS);
 	}
 
