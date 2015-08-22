@@ -1,5 +1,9 @@
 package com.partlight.sandcat;
 
+import java.io.File;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -31,7 +35,9 @@ public class SandCatGame extends Game {
 	}
 
 	public static final void loadAssetsJson() {
-		SandCatGame.getAssets().loadAssetJson("bin/assets.json");
+		final String path = "bin/assets.json";
+		if (Files.exists(FileSystems.getDefault().getPath(path)))
+			SandCatGame.getAssets().loadAssetJson("bin/assets.json");
 	}
 
 	/**
@@ -121,7 +127,8 @@ public class SandCatGame extends Game {
 
 	@Override
 	public void render() {
-		SandCatGame.amAssets.update();
+		if (SandCatGame.amAssets != null)
+			SandCatGame.amAssets.update();
 
 		Gdx.gl.glClearColor(this.bgR, this.bgG, this.bgB, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
