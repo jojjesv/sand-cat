@@ -1,5 +1,6 @@
 package com.partlight.sandcat.desktop;
 
+import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 public final class DesktopConfiguration extends LwjglApplicationConfiguration {
@@ -18,5 +19,12 @@ public final class DesktopConfiguration extends LwjglApplicationConfiguration {
 				break;
 			}
 		}
+	}
+	
+	public static final void printDisplayModes(){
+		final DisplayMode[] modes = DesktopConfiguration.getDisplayModes();
+		
+		for (DisplayMode mode : modes)
+			System.out.println(mode.toString());
 	}
 }

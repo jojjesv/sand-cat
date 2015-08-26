@@ -75,6 +75,12 @@ public class DissolveImage extends Image {
 		DissolveImage.this.isAnimating = false;
 	}
 
+	public void setInvertShader(boolean invertShader) {
+		this.spDissolveShader.begin();
+		this.spDissolveShader.setUniformi(this.shaderInvertLocation, ((invertShader) ? 1 : 0));
+		this.spDissolveShader.end();
+	}
+
 	protected void updateShader(float percent) {
 		this.spDissolveShader.begin();
 		this.tMap.bind(1);
@@ -83,11 +89,5 @@ public class DissolveImage extends Image {
 		this.spDissolveShader.end();
 
 		Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-	}
-
-	public void setInvertShader(boolean invertShader) {
-		this.spDissolveShader.begin();
-		this.spDissolveShader.setUniformi(this.shaderInvertLocation, ((invertShader) ? 1 : 0));
-		this.spDissolveShader.end();
 	}
 }

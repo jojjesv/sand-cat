@@ -1,6 +1,5 @@
 package com.partlight.sandcat;
 
-import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 
@@ -16,13 +15,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.partlight.sandcat.assets.Assets;
-import com.partlight.sandcat.assets.BaseAssetLibrary;
+import com.partlight.sandcat.assets.SandCatAssets;
 
 public class SandCatGame extends Game {
 
 	private static Assets	amAssets;
 	private static float	uptime;
 
+	
 	public static final Assets getAssets() {
 		if (SandCatGame.amAssets == null)
 			SandCatGame.amAssets = new Assets();
@@ -49,8 +49,6 @@ public class SandCatGame extends Game {
 		return SandCatGame.uptime;
 	}
 
-	private final BaseAssetLibrary balAssets;
-
 	protected OrthographicCamera	cCamera;
 	protected Viewport				vViewport;
 	protected float					bgG;
@@ -59,21 +57,17 @@ public class SandCatGame extends Game {
 	protected Stage					sHud;
 
 	public SandCatGame() {
-		this.balAssets = this.createAssetLibrary();
 	}
 
 	@Override
 	public void create() {
 		SandCatGame.loadAssetsJson();
+		SandCatAssets.create();
 		this.loadShaders();
 
 		this.cCamera = new OrthographicCamera();
 
 		this.vViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), this.cCamera);
-	}
-
-	public BaseAssetLibrary createAssetLibrary() {
-		return new BaseAssetLibrary();
 	}
 
 	public void disableHud() {
@@ -88,20 +82,19 @@ public class SandCatGame extends Game {
 	@Override
 	public void dispose() {
 		super.dispose();
+		SandCatAssets.dispose();
 
 		this.disableHud();
 
-		final Array<String> loadedAssets = SandCatGame.amAssets.getAssetManager().getAssetNames();
-		for (final String s : loadedAssets)
-			SandCatGame.amAssets.getAssetManager().unload(s);
+		if (SandCatGame.amAssets != null) {
+			final Array<String> loadedAssets = SandCatGame.amAssets.getAssetManager().getAssetNames();
+			for (final String s : loadedAssets)
+				SandCatGame.amAssets.getAssetManager().unload(s);
+		}
 	}
 
 	public void enableHud() {
 		this.sHud = new Stage();
-	}
-
-	public BaseAssetLibrary getAssetLibrary() {
-		return this.balAssets;
 	}
 
 	public OrthographicCamera getCamera() {

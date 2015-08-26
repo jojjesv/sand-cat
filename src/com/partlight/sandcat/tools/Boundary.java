@@ -15,8 +15,11 @@ public interface Boundary {
 		}
 	}
 
-	public float getBoundaryX();
-	public float getBoundaryY();
-	public float getBoundaryWidth();
 	public float getBoundaryHeight();
+
+	public float getBoundaryWidth();
+
+	public float getBoundaryX();
+
+	public float getBoundaryY();
 }
