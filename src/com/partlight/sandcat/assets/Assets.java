@@ -8,6 +8,7 @@ import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
@@ -68,17 +69,29 @@ public class Assets implements Disposable, AssetErrorListener {
 		this.amAssetManager.load(ASSET.path, ASSET.type);
 	}
 
-	public void loadAssetJson(String jsonPath) {
+	public Asset get(String tag) {
+		return this.omAssets.get(tag);
+	}
+
+	public void loadAssetJson(String jsonPath) throws Exception {
 		this.omAssets = new ObjectMap<String, Asset>();
 
 		final Json json = new Json();
 		final JsonReader reader = new JsonReader();
-		final JsonIterator arrayIterator = reader.parse(Gdx.files.internal(jsonPath)).iterator();
+		try {
+			final JsonIterator iterator = reader.parse(Gdx.files.internal(jsonPath)).iterator();
 
-		JsonValue arrayValue;
-		while (arrayIterator.hasNext()) {
-			arrayValue = arrayIterator.next();
-			this.omAssets.put(arrayValue.name, json.fromJson(Asset.class, arrayValue.get(0).toString()));
+			JsonValue value;
+			while (iterator.hasNext()) {
+				value = iterator.next();
+				final String string = value.toString();
+				
+				Gdx.app.debug("SandCat", "Found asset: " + value.name);
+				
+				this.omAssets.put(value.name, json.fromJson(Asset.class, string.substring(string.indexOf("{"))));
+			}
+		} catch (Exception ex) {
+			throw ex;
 		}
 	}
 
@@ -109,7 +122,7 @@ public class Assets implements Disposable, AssetErrorListener {
 
 				if (this.amAssetManager.isLoaded(next.key)) {
 					for (final AssetLoadingListener listener : this.aLoadingListeners)
-						listener.onAssetLoaded(next.key, next.value);
+						listener.onAssetLoaded(next.key, next.value, this);
 					this.aAssetsLoading.remove(next.key);
 					this.iAssetsLoadingIterator.remove();
 					break;

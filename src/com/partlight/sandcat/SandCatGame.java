@@ -37,7 +37,11 @@ public class SandCatGame extends Game {
 	public static final void loadAssetsJson() {
 		final String path = "bin/assets.json";
 		if (Files.exists(FileSystems.getDefault().getPath(path)))
-			SandCatGame.getAssets().loadAssetJson("bin/assets.json");
+			try {
+				SandCatGame.getAssets().loadAssetJson("bin/assets.json");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 	}
 
 	/**
@@ -93,8 +97,8 @@ public class SandCatGame extends Game {
 		}
 	}
 
-	public void enableHud() {
-		this.sHud = new Stage();
+	public void setHud(Stage hud){
+		this.sHud = hud;
 	}
 
 	public OrthographicCamera getCamera() {

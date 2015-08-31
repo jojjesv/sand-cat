@@ -1,5 +1,5 @@
 package com.partlight.sandcat.assets;
 
 public interface AssetLoadingListener {
-	public void onAssetLoaded(String fileName, String arrayTag);
+	public void onAssetLoaded(String assetPath, String assetTag, Assets asset);
 }
